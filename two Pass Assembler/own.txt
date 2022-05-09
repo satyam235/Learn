@@ -1,0 +1,48 @@
+from symtable import Symbol
+new_file=open("new_file.asm","w")
+f=open('sample.asm','rt')
+label_list=['START','USING','DC','DS',"END"]
+MOT=[]
+POT=[]
+Symbol=[]
+literal=[]
+location_counter=0
+while True:
+    line=f.readline().split(" ")
+    if len(line)==1:
+        break
+    if len(line)==3:
+        line[2]=line[2][:-2]
+    
+    if line[1] not in label_list:
+        MOT.append([line[1],'10','RX'])
+    else:
+        POT.append([line[1]])
+    if line[0]!='#':
+        if line[2]:
+            if "F'" in line[2]:
+                line[2]=line[2].replace("F'",'')
+            Symbol.append([line[0],location_counter,4,'R'])
+        else:
+            Symbol.append([line[0],0,1,'R'])
+    if len(line)==3 and line[2]:
+        t=line[2]
+        if "F'" in line[2]:
+                line[2]=line[2].replace("F'",'')
+        try:
+            temp=int(line[2])
+            literal.append([t,location_counter,4,'R'])
+        except:
+            pass
+    new_file.write(" ".join(line)+" "+str(location_counter)+"\n")
+    if line[1] not in ["START","END","USING"]:
+        location_counter+=4
+new_file.close()
+print("---------------------MOT-------------------------------------\n")
+print("Mnemonic\tLength\tInstruction Format")
+for i in MOT:
+    print("{}\t\t{}\t\t{}".format(i[0],i[1],i[2]))
+print(MOT)
+print(POT)
+print(Symbol)
+print(literal)

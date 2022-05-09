@@ -1,0 +1,72 @@
+from ast import operator
+from atexit import register
+from enum import Flag
+
+
+f=open("code_genertor_input.txt","r")
+register={}
+operators={"+":"ADD",'-':"SUB","*":"MUL","/":"DIV"}
+Exp=[]
+r=1
+flag=False
+while True:
+    line=f.readline().split(" ")
+    flag=False
+    if line[0]=="":
+        break
+    line[0]=line[0][:-1]
+    assign,exp=line[0].split("=")
+    for operator in operators:
+        
+      
+        if operator in exp:
+            flag=True
+            index=exp.index(operator)
+            op1=exp[index-1]
+            op2=exp[index+1]
+            operator=exp[index]
+            temp_reg1=""
+            temp_reg2=""
+            
+            if op1 not in register and op2 not in register:
+                register[op1]='R'+str(r)
+                print("MOVE {},{}".format(register[op1],op1))
+                r+=1
+                register[op2]='R'+str(r)
+                print("MOVE {},{}".format(register[op2],op2))
+                r+=1
+            if op1 not in register and op2 in register:
+                register[op1]='R'+str(r)
+                print("MOVE {},{}".format(register[op1],op1))
+                r+=1
+            elif op1 in register and op2 not in register:
+                register[op2]='R'+str(r)
+                print("MOVE {},{}".format(register[op2],op2))
+                r+=1
+                
+            if op1 in register and op2 in register:
+                temp_reg1=register[op1]
+                temp_reg2=register[op2]
+            
+            if operator:
+                print(operators[operator],temp_reg1,temp_reg2)
+                #Exp.append([operators[operator],temp_reg1,temp_reg2])
+                register[assign]=temp_reg1
+                register.pop(op1)
+                register.pop(op2)
+                r-=1
+    
+    if flag==False:
+        print("MOV {},{}".format(assign,exp))
+    
+
+            
+    
+
+'''
+A=B+C
+B=A-D
+C=B+C
+D=B
+
+'''

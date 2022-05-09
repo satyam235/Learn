@@ -1,0 +1,58 @@
+
+from email import message
+from re import L
+
+
+keywords_str='''auto	break	case	char const	continue	default	do double	else	enum	extern float	for	goto	if int	long	register	return short	signed	sizeof	static struct	switch	typedef	union unsigned	void	volatile	while'''
+keywords=keywords_str.split("\t")
+keywords+=["main","int","getch"]
+symbols=['{','}',',',';','(',')','<','>']
+preprocessor_directives=['#include']
+header=["stdio.h","conio.h"]
+f=open("c_program.c","r", encoding="utf8")
+symbols_found=[]
+preprocessor_directives_found=[]
+header_found=[]
+keywords_found=[]
+temp_list=[]
+message=[]
+while True:
+    line=f.readline().split(" ")
+
+    if line[0]=="":
+        break
+    line[-1]=line[-1][:-1]
+    
+    for l in line:
+            for i in symbols:
+                if i in l:
+                    l=l.replace(i," ")
+            temp_list+=l.split(" ")
+    
+
+    for i in symbols:
+        for j in line:
+            if i  in j:
+                symbols_found.append(i)
+                
+    
+
+for i in temp_list:
+    if i=="":
+        continue
+    if i in preprocessor_directives:
+        preprocessor_directives_found.append(i)
+    elif i in header:
+        header_found.append(i)
+    elif i in keywords:
+        keywords_found.append(i)
+    elif r'"'in i:
+        message.append(i)
+
+print(symbols_found)
+print(preprocessor_directives_found)
+print(header_found)
+print(keywords_found)
+print(message)
+
+    

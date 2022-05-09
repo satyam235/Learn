@@ -1,0 +1,14 @@
+.model small
+.stack
+.data
+msg DB, 10,13, "Compiler are language translators $" 
+.code
+MACRO Disp XX
+MOV AH, 09H
+LEA DX, XX
+INT 21H
+ENDM
+.startup
+Disp msg
+.EXIT
+END

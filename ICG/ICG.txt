@@ -1,0 +1,37 @@
+from ast import operator
+
+
+x,y=("A=B+C*D/E-F").split("=")
+operators=['*','/','-','+']
+i=1
+print(y)
+exp=[]
+for operator in operators:
+    if operator in y:
+        index=y.index(operator)
+        try:
+            index1=int(y[index-1])
+            index1="T"+str(y[index-1])
+        except:
+            index1=y[index-1]
+        try:
+            index2=int(y[index+1])
+            index2="T"+str(y[index+1])
+        except:
+            index2=y[index+1]
+        
+
+        exp.append([i,index1,operator,index2])
+        y=y.replace(y[index-1]+operator+y[index+1],str(i))
+        i+=1
+    
+variable_last=""
+for i in exp:    
+    print("T{}= {}{}{}".format(i[0],i[1],i[2],i[3]))
+    variable_last=i[0]
+print(x[0]+" = T{}".format(str(variable_last)))
+print("Quadraple:\n")
+j=0
+for i in exp:    
+    print("{} {} {} {} T{}".format(j,i[2],i[1],i[3],i[0]))
+print(str(j)+" = T{}".format(str(variable_last)))
